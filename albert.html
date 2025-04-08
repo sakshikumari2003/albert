@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albert, My Virtual Assistant</title>
+    <link rel="shortcut icon" href="vecteezy_ai-generated-cute-robot-kids-with-isolated-transparant_38049146.png" type="image/x-icon">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DynaPuff:wght@400..700&display=swap');
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 30px;
+        }
+        #logo {
+            width: 20vw;
+        }
+        h1 {
+            color: whitesmoke;
+            font-family: "DynaPuff", system-ui;
+        }
+        #name {
+            color: rgb(165, 35, 89);
+            font-size: 40px;
+        }
+        #va {
+            color: rgb(50, 109, 187);
+            font-size: 40px;
+        }
+        #voice {
+            width: 150px;
+        }
+        #voice img {
+            width: 150px;
+        }
+        .box {
+            width: 1500px;
+            padding: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #assis {
+            width: 30%;
+            padding: 10px;
+            background: linear-gradient(to right, rgb(150, 43, 221), rgb(228, 90, 175));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            border-radius: 20px;
+            color: aliceblue;
+            border: none;
+            transition: all 0.5s;
+            box-shadow: 2px 2px 10px rgb(150, 43, 221), 2px 2px 10px rgb(228, 90, 175);
+            cursor: pointer;
+        }
+        #assis:hover {
+            box-shadow: 2px 2px 30px rgb(150, 43, 221), 2px 2px 30px rgb(228, 90, 175);
+            letter-spacing: 2px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWOqvX3H8_kmFMGjpIYOg1EWsa6IBlTx9Ipg&s" alt="Robot Logo" id="logo">
+    <h1>I'm <span id="name">Albert</span>, Your <span id="va">Virtual Assistant</span></h1>
+
+    <div class="box">
+        <button id="assis">
+            <img src="mic.svg" alt="mic">
+            <i class="fa-solid fa-microphone-line-slash"></i>
+            <span id="content">Click here to talk to me</span>
+        </button>
+    </div>
+
+    <div id="voice">
+        <img src="XDZT.gif" alt="">
+    </div>
+
+    <script>
+        let btn = document.querySelector("#assis"); // Select button
+
+        // Function to speak text
+        const speakFunc = (input) => {
+            let speakInput = new SpeechSynthesisUtterance(input);
+            speakInput.lang = 'en-IN'; // Set language
+            window.speechSynthesis.speak(speakInput);
+        };
+
+        // Function to start voice recognition
+        const startVoiceInput = () => {
+            if ('webkitSpeechRecognition' in window) {
+                let recognition = new webkitSpeechRecognition();
+                recognition.lang = 'en-US';
+                recognition.continuous = true; // Keep listening
+                recognition.interimResults = false;
+
+                console.log("Voice recognition started..."); // Debugging log
+
+                recognition.onresult = (event) => {
+                    let speaktext = event.results[event.results.length - 1][0].transcript;
+                    console.log("Recognized Text:", speaktext); // Debugging
+                    handleCommands(speaktext.toLowerCase());
+                };
+
+                recognition.onerror = (error) => {
+                    console.error("Speech recognition error:", error);
+                    alert("Error in voice recognition. Please try again.");
+                };
+
+                recognition.onend = () => {
+                    console.log("Voice recognition ended."); // Debugging
+                    recognition.start(); // Restart on end
+                };
+
+                recognition.start();
+            } else {
+                alert("Your browser does not support voice input!");
+            }
+        };
+
+        // Handle voice commands
+        const handleCommands = (command) => {
+            if (command.includes("hello") || command.includes("hey") || command.includes("hi")) {
+                speakFunc("Hello, how can I help you?");
+            } else if (command.includes("who developed you") || command.includes("who created you")) {
+                speakFunc("Hello, I am Albert, created by Sakshi and Shudhanshu.");
+            } else if (command.includes("how are you")) {
+                speakFunc("Hello, I am fine, thank you for asking. How can I help you?");
+            } else if (command.includes("open chat gpt") || command.includes("chat gpt")) {
+                speakFunc("Opening... Chat GPT");
+                window.open("https://chatgpt.com");
+            } else if (command.includes("open google") || command.includes("google")) {
+                speakFunc("Opening... Google");
+                window.open("https://www.google.com");
+            } else if (command.includes("time") || command.includes("tell me time")) {
+                let time = new Date().toLocaleString(undefined, { hour: 'numeric', minute: 'numeric' });
+                speakFunc(T`the time is ${time}`);
+            } else if (command.includes("date") || command.includes("tell me date")) {
+                let date = new Date().toLocaleString(undefined, { day: 'numeric', month: 'numeric', weekday: 'long' });
+                speakFunc(`Today's date is ${date}`);
+            } else if (command.includes("open youtube") || command.includes("youtube")) {
+                speakFunc("Opening... YouTube");
+                window.open("https://www.youtube.com");
+            } else {
+                speakFunc(`Here's what I found on the internet regarding your query: ${command}`);
+                window.open(`https://www.google.com/search?q=${command}`);
+            }
+        };
+
+        // Start voice recognition when button is clicked
+        btn.onclick = () => {
+            startVoiceInput();
+        };
+    </script>
+</body>
+</html>
